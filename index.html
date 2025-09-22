@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="img/flowers.png" type="image/x-icon">
+  <title>Flowers</title>
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: #fce4ec;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 300px;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .container h2 {
+      font-size: 1.7rem;
+    }
+
+    .input-display {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 30px;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .keypad button {
+      padding: 15px;
+      font-size: 25px;
+      background-color: #f8bbd0;
+      border: 1px black solid;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 8px;
+    }
+
+    .keypad button:hover {
+      background-color: #f48fb1;
+    }
+
+    .keypad button:last-child {
+      grid-column: 2/3;
+    }
+
+    /* Ocultar saludo al inicio */
+    .greetings,
+    .description,
+    .button {
+      display: none;
+      text-align: center;
+    }
+
+    .greetings {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    .greetings span {
+      opacity: 0;
+      display: inline-block;
+      font-size: 2.5rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .description {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      min-height: 1.5em; /* espacio reservado */
+    }
+
+    .botones {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #f48fb1;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+      animation: bounceIn 0.8s ease, glow 1.5s infinite alternate;
+    }
+
+    .botones:hover {
+      background-color: #ec407a;
+    }
+
+    /* Animación de rebote */
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Animación de brillo */
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px #f48fb1, 0 0 10px #f48fb1, 0 0 20px #f48fb1;
+      }
+      100% {
+        box-shadow: 0 0 15px #ec407a, 0 0 30px #ec407a, 0 0 45px #ec407a;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Pantalla de login -->
+  <div class="container" id="loginBox">
+    <h2>
+      🔒<br />
+      Ingrese la contraseña
+    </h2>
+    <div class="input-display" id="inputDisplay">••••</div>
+    <div class="keypad">
+      <button class="key" onclick="enterDigit('1')">1</button>
+      <button class="key" onclick="enterDigit('2')">2</button>
+      <button class="key" onclick="enterDigit('3')">3</button>
+      <button class="key" onclick="enterDigit('4')">4</button>
+      <button class="key" onclick="enterDigit('5')">5</button>
+      <button class="key" onclick="enterDigit('6')">6</button>
+      <button class="key" onclick="enterDigit('7')">7</button>
+      <button class="key" onclick="enterDigit('8')">8</button>
+      <button class="key" onclick="enterDigit('9')">9</button>
+      <button class="key" onclick="enterDigit('0')">0</button>
+    </div>
+  </div>
+
+  <!-- Pantalla de saludo -->
+  <div class="greetings" id="greetings">
+    <span>H</span>
+    <span>o</span>
+    <span>l</span>
+    <span>a</span>
+    <span>💗</span>
+  </div>
+
+  <div class="description" id="description"></div>
+
+  <div class="button" id="buttonBox">
+    <a href="flower.html" class="botones">DA CLICK AQUÍ</a>
+  </div>
+
+  <script>
+    const correctPassword = "1999";
+    const display = document.getElementById("inputDisplay");
+    const loginBox = document.getElementById("loginBox");
+    const greetings = document.getElementById("greetings");
+    const description = document.getElementById("description");
+    const buttonBox = document.getElementById("buttonBox");
+
+    let input = "";
+
+    function enterDigit(digit) {
+      if (input.length < 4) {
+        input += digit;
+      }
+      display.textContent = input.padEnd(4, "•");
+
+      if (input.length === 4) {
+        if (input === correctPassword) {
+          // Ocultar login
+          loginBox.style.display = "none";
+
+          // Mostrar saludo
+          greetings.style.display = "block";
+          description.style.display = "block";
+          buttonBox.style.display = "block";
+
+          // Animar letras del "Hola 💗"
+          const letters = greetings.querySelectorAll("span");
+          letters.forEach((letter, index) => {
+            setTimeout(() => {
+              letter.style.opacity = 1;
+            }, index * 400);
+          });
+
+          // Cuando termine "Hola 💗", escribir el texto
+          setTimeout(() => {
+            typeWriter("De Quique para Mich 💗", description, 80);
+          }, letters.length * 400 + 500);
+
+        } else {
+          alert("Contraseña incorrecta, intenta de nuevo");
+          input = "";
+          display.textContent = "••••";
+        }
+      }
+    }
+
+    // Efecto máquina de escribir
+    function typeWriter(text, element, speed) {
+      let i = 0;
+      element.textContent = "";
+      const interval = setInterval(() => {
+        element.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+        }
+      }, speed);
+    }
+  </script>
+
+</body>
+</html>
